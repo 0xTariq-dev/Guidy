@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """This is the user module."""
 
-import models
-from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
@@ -18,6 +16,9 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=True)
     last_name = Column(String(128), nullable=True)
     review = relationship("Review", backref="user")
+    courses = relationship("Course",
+                           secondary="enrollments",
+                           back_populates="users")
     
     def __init__(self, *args, **kwargs):
         """User class constructor"""

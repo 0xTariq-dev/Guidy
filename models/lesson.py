@@ -1,0 +1,21 @@
+#!/usr/bin/python
+"""Lesson module"""
+
+import models
+from models.base_model import BaseModel, Base
+from sqlalchemy import Column, String, ForeignKey, Table
+from sqlalchemy.orm import relationship
+
+
+class Lesson(BaseModel, Base):
+    """Lesson class to store lesson information"""
+    __tablename__ = 'lessons'
+    name = Column(String(128), nullable=False)
+    description = Column(String(1024), nullable=False)
+    course_id = Column(String(60), ForeignKey('courses.id'), nullable=False)
+    course = relationship("Course", backref="lessons")
+    resources = relationship("Resource", backref="lessons")
+
+    def __init__(self, *args, **kwargs):
+        """initializes Lesson"""
+        super().__init__(*args, **kwargs)
