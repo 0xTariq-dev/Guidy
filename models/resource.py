@@ -10,11 +10,11 @@ from sqlalchemy.orm import relationship
 class Resource(BaseModel, Base):
     """Resource class to store resource information"""
     __tablename__ = 'resources'
-    name = Column(String(128), nullable=False)
+    title = Column(String(128), nullable=False)
     type = Column(String(128), nullable=True)
     link = Column(String(128), nullable=False)
     lesson_id = Column(String(60), ForeignKey('lessons.id'), nullable=False)
-    lesson = relationship("Lesson", backref="resources")
+    lesson = relationship("Lesson", back_populates="resources")
 
     def __init__(self, *args, **kwargs):
         """initializes Resource"""

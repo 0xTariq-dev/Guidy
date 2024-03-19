@@ -6,7 +6,7 @@ import sqlalchemy
 from models.base_model import BaseModel, Base
 from models.lesson import Lesson
 from models.user import User
-from sqlalchemy import Column, String, ForeignKey, Table
+from sqlalchemy import Column, String, ForeignKey, Table, Integer
 from sqlalchemy.orm import relationship
 
 course_lessons = Table('course_lessons', Base.metadata,
@@ -23,12 +23,17 @@ course_lessons = Table('course_lessons', Base.metadata,
 class Course(BaseModel, Base):
     """Representation of Course """
     __tablename__ = 'courses'
-    name = Column(String(128), nullable=False)
+    title = Column(String(128), nullable=False)
+    category = Column(String(128), nullable=False)
     description = Column(String(1024), nullable=False)
+    length = Column(Integer, nullable=False)
+    level = Column(String(60), nullable=False)
     lessons = relationship("Lesson",
                             secondary=course_lessons,
+                            back_populates="course",
                             viewonly=False)
-    users = Column(String(60), ForeignKey('users.id'), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+    user = relationship("User", secondary="enrollments", back_populates="courses")
 
     def __init__(self, *args, **kwargs):
         """initializes Course"""
