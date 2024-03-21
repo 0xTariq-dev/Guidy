@@ -13,11 +13,11 @@ course_lessons = Table('course_lessons', Base.metadata,
                        Column('course_id', String(60),
                               ForeignKey('courses.id', onupdate='CASCADE',
                                          ondelete='CASCADE'),
-                                primary_key=True),
-                        Column('lesson_id', String(60),
-                               ForeignKey('lessons.id', onupdate='CASCADE',
-                                            ondelete='CASCADE'),
-                                 primary_key=True))
+                              primary_key=True),
+                       Column('lesson_id', String(60),
+                              ForeignKey('lessons.id', onupdate='CASCADE',
+                                         ondelete='CASCADE'),
+                              primary_key=True))
 
 
 class Course(BaseModel, Base):
@@ -29,11 +29,11 @@ class Course(BaseModel, Base):
     length = Column(Integer, nullable=False)
     level = Column(String(60), nullable=False)
     lessons = relationship("Lesson",
-                            secondary=course_lessons,
-                            back_populates="course",
-                            viewonly=False)
+                           secondary=course_lessons,
+                           back_populates="course",
+                           viewonly=False)
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    user = relationship("User", secondary="enrollments", back_populates="courses")
+    user = relationship("User", secondary="enrollments", back_populates="courses")  # noqa
 
     def __init__(self, *args, **kwargs):
         """initializes Course"""

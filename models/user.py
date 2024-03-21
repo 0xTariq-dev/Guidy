@@ -8,9 +8,9 @@ from sqlalchemy.orm import relationship
 from models.base_model import BaseModel, Base
 
 enrollments = Table('enrollments', Base.metadata,
-    Column('user_id', String(60), ForeignKey('users.id')),
-    Column('course_id', String(60), ForeignKey('courses.id'))
-)
+                    Column('user_id', String(60), ForeignKey('users.id')),
+                    Column('course_id', String(60), ForeignKey('courses.id'))
+                    )
 
 
 class User(BaseModel, Base):

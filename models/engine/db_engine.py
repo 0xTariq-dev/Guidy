@@ -14,6 +14,7 @@ from models.resource import Resource
 from models.review import Review
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm.session import object_session
 
 classes = {"User": User,
            "Course": Course,
@@ -27,6 +28,12 @@ class DBStorage:
     """interacts with the MySQL database"""
     __engine = None
     __session = None
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(DBStorage, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
 
     def __init__(self):
         """Instantiate a DBStorage object"""
@@ -59,7 +66,7 @@ class DBStorage:
 
     def new(self, obj):
         """add the object to the current database session"""
-        self.__session.add(obj)
+        self.__session.merge(obj)
 
     def save(self):
         """commit all changes of the current database session"""
@@ -67,8 +74,19 @@ class DBStorage:
 
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
-        if obj is not None:
-            self.__session.delete(obj)
+        if obj is None:
+            return
+        
+        if isinstance(obj, Course):
+            lessons = self.__session.query(Lesson).filter(Lesson.course_id == obj.id).all()
+            self.__session.delete(lesson for lesson in lessons )
+        
+        if isinstance(obj, Lesson):
+            lessons = self.__session.query(Resource).filter(Resource.lesson_id == obj.id).all()
+            self.__session.delete(lesson for lesson in lessons )
+
+        self.__session.delete(obj)
+        self.save()
 
     def reload(self):
         """create all tables in the database"""
