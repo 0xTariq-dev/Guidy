@@ -68,7 +68,7 @@ class GuidyAdmin(cmd.Cmd):
     def do_create(self, arg):
         """
         Creates a new instance of an object
-        [Usage]: create <ObjectType> <Attribute1=Value1> <Attribute2=Value2>
+        [Usage]: create <Object Type> <Attribute1=Value1> <Attribute2=Value2>
         """
         ObjType = shlex.split(arg)
         if len(ObjType) == 0:
@@ -88,7 +88,7 @@ class GuidyAdmin(cmd.Cmd):
     def do_show(self, arg):
         """
         Prints an individual instance of an object
-        [Usage]: show <ObjectType> <instance id>
+        [Usage]: show <Object Type> <Instance ID>
         """
         ObjD = shlex.split(arg)
         if len(ObjD) == 0:
@@ -112,7 +112,7 @@ class GuidyAdmin(cmd.Cmd):
     def do_destroy(self, arg):
         """
         Deletes an instance based on the class and id
-        [Usage]: destroy <className> <objectId>
+        [Usage]: destroy <Object Type> <Instance ID>
         """
         ObjD = shlex.split(arg)
 
@@ -140,7 +140,7 @@ class GuidyAdmin(cmd.Cmd):
     def do_all(self, arg):
         """
         Prints string representations of instances
-        [Usage]: all <ObjectType> or all
+        [Usage]: all <Object Type> or all
         """
         Obj = shlex.split(arg)
         Type = Obj[0] if len(Obj) > 0 else ""
@@ -163,7 +163,7 @@ class GuidyAdmin(cmd.Cmd):
     def do_update(self, arg):
         """
         Update an instance based on the class Type, id, attribute & value
-        [usage]: update <className> <id> <Key> <Value>
+        [usage]: update <Object Type> <Instance ID> <Key> <Value>
         """
         ObjD = shlex.split(arg)
         Type, ID = ObjD[0], ObjD[1]
