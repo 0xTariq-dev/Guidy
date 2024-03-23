@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guidy</title>
+    <link rel='shortcut icon' href="../images/icon.png" />
+    <link href="../styles/CSS/main-min.css" rel="stylesheet">
+    <link href="../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- nav bar -->
+    <nav class="navbar bg-light shadow">
+        <div class="container-fluid row align-items-end">
+            <a href="#home" class="navbar-brand col-2">
+                <span class="text-primary h1 ms-xl-3">Guidy</span>
+            </a>
+            <div class="container col">
+                <a href="#home" class="me-xl-5 text-decoration-none">Home</a>
+                <a href="#Courses" class="mx-xl-5 text-decoration-none">Courses</a>
+                <a href="#Chat" class="mx-5 text-decoration-none">Chat</a>
+            </div>
+            <a href="#account" class="col-1 text-end">
+                <i class="bi bi-person-circle h1"></i>
+            </a>
+        </div>
+    </nav>
+
+    <section id="main" class="d-flex row">
+
+        <!-- side bar -->
+        <div class="flex-shrink-0 p-3 bg-light d-none d-lg-inline col-3" style="height: 100vh;">
+            <span class="h1">Courses</span>
+
+            <ul class="list-unstyled ps-0 mt-3">
+            
+            <li class="mb-1">
+                <button class="btn fw-semibold">
+                New course...
+                </button>
+
+            </li>
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                C programming
+                </button>
+                <div class="collapse show" id="dashboard-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 1</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 2</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 3</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 4</a></li>
+                </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                Math
+                </button>
+                <div class="collapse" id="orders-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 1</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 2</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 3</a></li>
+                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Lesson 4</a></li>
+                </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                Psychology
+                </button>
+                <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="#" class="link-body-emphasis text-decoration-none">Lesson 1</a></li>
+                    <li><a href="#" class="link-body-emphasis text-decoration-none">Lesson 2</a></li>
+                    <li><a href="#" class="link-body-emphasis text-decoration-none">Lesson 3</a></li>
+                    <li><a href="#" class="link-body-emphasis text-decoration-none">Lesson 4</a></li>
+                </ul>
+                </div>
+            </li>
+            </ul>
+        </div>
+
+
+        <!-- new course section -->
+        <div id="new_course" class="col">
+            <h1 class="display-3 mx-5 py-3">New course</h1>
+            <div class="container d-grid gap-2 d-md-block">
+            <select class="form-select me-5 my-4" aria-label="Category">
+                <option selected="">Category</option>
+                <option value="1">Tech</option>
+                <option value="2">Math</option>
+                <option value="3">psycology</option>
+            </select>
+            <select class="form-select me-5 my-4" aria-label="Level">
+                <option selected="">Level</option>
+                <option value="1">beginner</option>
+                <option value="2">intermediate</option>
+                <option value="3">Advanced</option>
+            </select>
+            <select class="form-select me-5 my-4" aria-label="Resource type">
+                <option selected="">Resource type</option>
+                <option value="1">Video</option>
+                <option value="2">wikipedia</option>
+                <option value="3">Articles</option>
+            </select>
+
+        </div>
+        <div class="mx-5">
+                        <!-- course size -->
+            <input type="radio" class="btn-check" name="options-outlined" id="Short" autocomplete="off">
+            <label class="btn btn-outline-dark" for="Short">Short</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="Balanced" autocomplete="off" checked="">
+            <label class="btn btn-outline-dark" for="Balanced">Balanced</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="Informative" autocomplete="off">
+            <label class="btn btn-outline-dark" for="Informative">Informative</label>
+        </div>
+        <div class="d-flex justify-content-center m-5">
+            <button type="submit" class="btn btn-outline-primary" id="liveAlertBtn">Create course</button>
+        </div>
+        </div>
+    </section>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
