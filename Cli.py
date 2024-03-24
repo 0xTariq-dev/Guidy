@@ -30,6 +30,15 @@ class GuidyAdmin(cmd.Cmd):
 
     types = {'rating': int, 'length': int}
 
+    def cmdloop(self, intro=None):
+        while True:
+            try:
+                super().cmdloop(intro=intro)
+                break
+            except KeyboardInterrupt:
+                print("\nQuitting...")
+                return
+            
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
@@ -54,7 +63,6 @@ class GuidyAdmin(cmd.Cmd):
                     v = v.replace('_', ' ')
             else:
                 k, v = arg.split('=', 1)
-                print(v)
                 try:
                     v = int(v)
                 except ValueError:
@@ -158,7 +166,7 @@ class GuidyAdmin(cmd.Cmd):
         for key in ObjDict:
             ObjList.append(str(ObjDict[key]))
 
-        print("[" + ", ".join(ObjList) + "]", end='\n')
+        print("\n" + ",\n\n".join(ObjList) + "\n", end='\n')
 
     def do_update(self, arg):
         """

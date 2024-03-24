@@ -32,6 +32,7 @@ class Course(BaseModel, Base):
                            secondary=course_lessons,
                            back_populates="course",
                            viewonly=False)
+    reviews = relationship("Review", backref="course", cascade="all, delete-orphan")
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     user = relationship("User", secondary="enrollments", back_populates="courses")  # noqa
 

@@ -70,5 +70,5 @@ class BaseModel(Base):
 
     def __str__(self):
         """Return a string representation of the model"""
-        return "[{:s}] ({}) {}".format(self.__class__.__name__, self.id,
+        return "[{:s}] ({})\n{}".format(self.__class__.__name__, self.id,
                                        self.to_dict())
