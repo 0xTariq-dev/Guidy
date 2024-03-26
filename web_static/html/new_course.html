@@ -11,6 +11,8 @@
 
     <link href="../styles/CSS/main-min.css" rel="stylesheet">
     <link href="../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="../styles/CSS/chatbox.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <script src="../node_modules/bootstrap/js/color-modes.js"></script>
 </head>
 
@@ -33,41 +35,43 @@
     </svg>
 
     <!-- chat modal -->
-    <!-- Button trigger modal -->
-    <div class="position-fixed bottom-0 end-0 mb-3 me-3">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chatBox">
-            <i class="bi bi-chat-right-dots"></i>
-        </button>
-    </div>
+    <!-- chat modal -->
+    <div class="chatbox-wrapper">
+        <div class="chatbox-toggle">
+            <i class='bx bx-message-dots'></i>
+        </div>
+        <div class="chatbox-message-wrapper text-dark">
+            <div class="chatbox-message-header">
+                <div class="chatbox-message-profile">
+                    <i class="bi bi-robot h1 me-2"></i>
+                    <div>
+                        <h4 class="chatbox-message-name">Guidy</h4>
 
-    <!-- Modal -->
-    <div class="modal" id="chatBox" tabindex="-1" aria-labelledby="ChatBox" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-lg-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="d-flex flix-row align-items-center">
-                        <i class="bi bi-robot h1 text-primary mx-2"></i>
-                        <h4>Guidy</h4>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="chatbox-message-content">
-                        <h4 class="chatbox-message-no-message">You don't have message yet!</h4>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptatibus obcaecati nam, nihil
-                            fugit illo fugiat eligendi laudantium nesciunt cumque ab deleniti consequuntur aliquid
-                            impedit blanditiis earum neque, eos dolores! Sapiente.</p>
                     </div>
                 </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <form action="#" class="chatbox-message-form row w-100">
-                        <textarea rows="3" placeholder="Type message..."
-                            class="col-10 chatbox-message-input"></textarea>
-                        <button type="submit" class="btn btn-primary col-2">
-                            <i class="bi bi-send"></i>
-                        </button>
-                    </form>
+                <div class="chatbox-message-dropdown">
+                    <i class='bx bx-dots-vertical-rounded chatbox-message-dropdown-toggle'></i>
+                    <ul class="chatbox-message-dropdown-menu">
+                        <li>
+                            <a href="#">Search</a>
+                        </li>
+                        <li>
+                            <a href="#">Report</a>
+                        </li>
+                    </ul>
                 </div>
+            </div>
+            <div class="chatbox-message-content">
+                <h4 class="chatbox-message-no-message">You don't have message yet!</h4>
+            </div>
+            <div class="chatbox-message-bottom">
+                <form action="#" class="chatbox-message-form">
+                    <textarea rows="1" placeholder="Type message..."
+                        class="chatbox-message-input bg-light text-dark"></textarea>
+                    <button type="submit" class="chatbox-message-submit bg-light">
+                        <i class='bx bx-send'></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -286,7 +290,7 @@
 
         </main>
     </div>
-
+    <script src="../styles/js/chatBox.js"></script>
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
