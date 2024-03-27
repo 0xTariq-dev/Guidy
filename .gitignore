@@ -3,3 +3,11 @@ __pycache__
 GA.queries
 main.py
 run_test.sh
+test.json
+lesson1.json
+course.json
+test.html
+test_ai.py
+.venv
+models/AI/DeepSeek-VL-7B
+models/AI/transformers-test.py
