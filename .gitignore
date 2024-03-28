@@ -1,2 +1,13 @@
 __pycache__
 main.py
+.env
+GA.queries
+main.py
+run_test.sh
+test.json
+lesson1.json
+course.json
+test.html
+.venv
+models/AI/DeepSeek-VL-7B
+models/AI/transformers-test.py
