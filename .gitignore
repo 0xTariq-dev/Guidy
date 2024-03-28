@@ -1,0 +1,5 @@
+__pycache__
+.env
+GA.queries
+main.py
+run_test.sh

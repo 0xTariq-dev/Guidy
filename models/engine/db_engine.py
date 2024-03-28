@@ -14,6 +14,7 @@ from models.resource import Resource
 from models.review import Review
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm.session import object_session
 
 classes = {"User": User,
            "Course": Course,
@@ -27,6 +28,12 @@ class DBStorage:
     """interacts with the MySQL database"""
     __engine = None
     __session = None
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(DBStorage, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
 
     def __init__(self):
         """Instantiate a DBStorage object"""
@@ -67,8 +74,23 @@ class DBStorage:
 
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
-        if obj is not None:
-            self.__session.delete(obj)
+        if obj is None:
+            return
+        
+        if isinstance(obj, User):
+            self.__delete_user(obj)
+            return
+
+        if isinstance(obj, Course):
+            self.__delete_course(obj)
+            return
+
+        if isinstance(obj, Lesson):
+            self.__delete_lesson(obj)
+            return
+
+        self.__session.delete(obj)
+        self.save()
 
     def reload(self):
         """create all tables in the database"""
@@ -101,3 +123,40 @@ class DBStorage:
             [len(st.all(cl)) for cl in all_cls]
             )
         return count
+
+    def __delete_user(self, user):
+        """delete user and associated objects"""
+        courses = self.__session.query(Course).filter(Course.user_id == user.id).all()
+        for course in courses:
+            lessons = self.__session.query(Lesson).filter(Lesson.course_id == course.id).all()
+            for lesson in lessons:
+                resources = self.__session.query(Resource).filter(Resource.lesson_id == lesson.id).all()
+                [self.__session.delete(resource) for resource in resources]
+                self.__session.delete(lesson)
+            reviews = self.__session.query(Review).filter(Review.course_id == course.id).all()
+            [self.__session.delete(review) for review in reviews]
+            self.__session.delete(course)
+        self.__session.flush()
+        self.__session.delete(user)
+        self.save()
+
+    def __delete_course(self, course):
+        """delete course and associated objects"""
+        lessons = self.__session.query(Lesson).filter(Lesson.course_id == course.id).all()
+        for lesson in lessons:
+            resources = self.__session.query(Resource).filter(Resource.lesson_id == lesson.id).all()
+            [self.__session.delete(resource) for resource in resources]
+            self.__session.delete(lesson)
+        reviews = self.__session.query(Review).filter(Review.course_id == course.id).all()
+        [self.__session.delete(review) for review in reviews]
+        self.__session.flush()
+        self.__session.delete(course)
+        self.save()
+
+    def __delete_lesson(self, lesson):
+        """delete lesson and associated objects"""
+        resources = self.__session.query(Resource).filter(Resource.lesson_id == lesson.id).all()
+        [self.__session.delete(resource) for resource in resources]
+        self.__session.delete(lesson)
+        self.__session.flush()
+        self.save()

@@ -45,7 +45,6 @@ class BaseModel(Base):
             self.created_at = datetime.now()
             self.updated_at = self.created_at
 
-
     def save(self):
         """Save the model to the database"""
         self.updated_at = datetime.now()
@@ -71,5 +70,5 @@ class BaseModel(Base):
 
     def __str__(self):
         """Return a string representation of the model"""
-        return "[{:s}] ({}) {}".format(self.__class__.__name__, self.id,
+        return "[{:s}] ({})\n{}".format(self.__class__.__name__, self.id,
                                        self.to_dict())
