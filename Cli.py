@@ -38,7 +38,7 @@ class GuidyAdmin(cmd.Cmd):
             except KeyboardInterrupt:
                 print("\nQuitting...")
                 return
-            
+
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
