@@ -16,19 +16,21 @@ from models.review import Review
 
 
 if __name__ == "__main__":
-    print(sys.path)
-    user_course = Guidy.CreateCourse("Java", "Medium", 5)
-    print(f"+++\n{user_course}+++\n")
-    user = User(first_name="Fake", last_name="User",
-                email="Fake@gmail.com", password="FakePass",
+
+    user = User(first_name="Dev", last_name="User",
+                email="dev_user@gmail.com", password="DevPass",
                 resource_type="Books"
                 )
     st.new(user)
     st.save()
-    print()
-    print(user.to_dict())
+
     print()
     print(st.get(User, user.id))
+
+    user_course = Guidy.CreateCourse("Java", "Medium", 3)
+    print("the course from AI")
+    print(f"\n+++\n{user_course}\n+++\n")
+
     course1 = Course(title=user_course['title'], category=user_course['category'],
                 description=user_course['description'], length=user_course['length'],
                 level=user_course['level'], user_id=user.id
@@ -36,36 +38,43 @@ if __name__ == "__main__":
     user.courses.append(course1)
     st.new(course1)
     st.save()
-    print()
-    print(course1.to_dict())
-    print()
+
+    print("the course from db")
     print(st.get(Course, course1.id))
-    # print(Course['lessons'])
-    # print(course_json)
-    # with open('course.json', 'w') as f:
-    #     f.write(str(Course))
 
-    # lessons = {k: v for k, v in Course['lessons'].items()}
-    # [print(f"{k}: {v}") for k, v in Course.items() if k != 'lessons']
-    # [print(f"{k}: {v}") for k, v in lessons.items()]
+    print("*****************************")
 
-    # title = Course['title']
+
+    print("lessons list from the AI course")
+    print(user_course['lessons'])
+
+    print("*****************************")
+
+
+    lessons = {k: v for k, v in user_course['lessons'].items()}
+    [print(f"{k}: {v}") for k, v in user_course.items()]
+    print("done done dooooone")
+    [print(f"{k}: {v}") for k, v in lessons.items()]
+    print("*****************************")
+
+    title = user_course['title']
     # values = list(lessons.values())
     # keys = list(lessons.keys())
     # print(values[0])
     # print(title)
-    # lessons = list(Course['lessons'].values())
-    # lesson = Guidy.ExplainLesson(Course['category'], lessons[0], "video")
-    # print(lesson)
-    # print(lesson.description)
-    # [print(resource) for resource in lesson['resources']]
-    # display(HTML(lesson['description']))
+    lessons = list(user_course['lessons'].values())
+    for alesson in lessons:
+
+        lesson = Guidy.ExplainLesson(title, lessons[0], "video")
+        print(lesson)
+        lessonObj = Lesson(title=lesson['title'], description=lesson['description'], course_id=course1.id)
+        st.new(lessonObj)
+        st.save()
+
+
     # lesson1 = json.loads(lesson)
     # print(lesson1)
-    # with open('lesson1.json', 'w') as f:
-        # json.dump(lesson1, f)
 
-    # [print(f"{k}: {v}") for k, v in lesson1.items() if k != 'resources']
-    # [print(f"{k}: {v}") for k, v in lesson1['resources'].items()]
 
-    # print("Done!")
+
+    print("Done!")
