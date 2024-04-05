@@ -43,6 +43,11 @@
 			<img class="object-fit-scale" height="50" src="../images/logo.png" alt="Guidy" />
 		</a>
 
+		<!-- <a href="#account" class="mx-2">
+			<button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#account-collapse">
+				<i class="bi bi-person-circle h1 text-primary"></i>
+			</button>
+		</a> -->
 		<!-- theme change element -->
 		<div class="dropdown m-3 bd-mode-toggle">
 			<button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme"
@@ -88,27 +93,33 @@
 			</ul>
 		</div>
 	</header>
+
 	<div class="container d-flex justify-content-center align-items-center vh-100">
-    	<div class="card" style="width: 28rem;">
-        	<div class="card-body">
+    <div class="card" style="width: 28rem;">
+        <div class="card-body">
 				<form>
+					<div class="mb-3">
+						<label for="exampleInputEmail1" class="form-label">First name</label>
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+					</div>
+					<div class="mb-3">
+						<label for="exampleInputEmail1" class="form-label">Last name</label>
+						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+					</div>
 					<div class="mb-3">
 						<label for="exampleInputEmail1" class="form-label">Email address</label>
 						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+						<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
 					</div>
 					<div class="mb-3">
 						<label for="exampleInputPassword1" class="form-label">Password</label>
 						<input type="password" class="form-control" id="exampleInputPassword1">
 					</div>
-					<div class="mb-3 form-check">
-						<input type="checkbox" class="form-check-input" id="exampleCheck1">
-						<label class="form-check-label" for="exampleCheck1">Stay Signed In</label>
-					</div>
-					<button type="submit" class="btn btn-primary">Log in</button>
-				</form>
-        	</div>
-			<a href="signup.html" class="btn btn-link">Don't have an account? Sign up instead.</a>
-		</div>
+					<button type="submit" class="btn btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
 	</div>
 	<!-- Footer-->
 	<footer class="footer">
@@ -145,4 +156,5 @@
 	<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="../styles/js/chatBox.js"></script>
 </body>
+
 </html>
