@@ -11,8 +11,8 @@ class Review(BaseModel, Base):
     __tablename__ = 'reviews'
     text = Column(String(1024), nullable=False)
     rating = Column(Integer, nullable=False)
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    course_id = Column(String(60), ForeignKey('courses.id'), nullable=False)
+    user_id = Column(String(60), ForeignKey('users.id'))
+    course_id = Column(String(60), ForeignKey('courses.id'))
 
     def __init__(self, *args, **kwargs):
         """initializes Review"""

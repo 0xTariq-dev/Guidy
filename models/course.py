@@ -9,16 +9,6 @@ from models.user import User
 from sqlalchemy import Column, String, ForeignKey, Table, Integer
 from sqlalchemy.orm import relationship
 
-course_lessons = Table('course_lessons', Base.metadata,
-                       Column('course_id', String(60),
-                              ForeignKey('courses.id', onupdate='CASCADE',
-                                         ondelete='CASCADE'),
-                              primary_key=True),
-                       Column('lesson_id', String(60),
-                              ForeignKey('lessons.id', onupdate='CASCADE',
-                                         ondelete='CASCADE'),
-                              primary_key=True))
-
 
 class Course(BaseModel, Base):
     """Representation of Course """
@@ -28,11 +18,10 @@ class Course(BaseModel, Base):
     description = Column(String(1024), nullable=False)
     length = Column(Integer, nullable=False)
     level = Column(String(60), nullable=False)
-    lessons = relationship("Lesson",
-                           secondary=course_lessons,
-                           back_populates="course",
-                           viewonly=False)
-    reviews = relationship("Review", backref="course", cascade="all, delete-orphan")
+    resource_type = Column(String(60), nullable=False)
+    lessons_titles = Column(String(1024), nullable=False)
+    lessons = relationship("Lesson", back_populates="course", cascade="all, delete-orphan")
+    reviews = relationship("Review", backref="course")
     user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
     user = relationship("User", secondary="enrollments", back_populates="courses")  # noqa
 
