@@ -3,6 +3,7 @@
 
 import models
 import sqlalchemy
+# from sqlalchemy.dialects.mysql import JSON
 from models.base_model import BaseModel, Base
 from models.lesson import Lesson
 from models.user import User
@@ -19,11 +20,11 @@ class Course(BaseModel, Base):
     length = Column(Integer, nullable=False)
     level = Column(String(60), nullable=False)
     resource_type = Column(String(60), nullable=False)
-    lessons_titles = Column(String(1024), nullable=False)
+    lessons_titles = Column(String(1024), nullable=True, default={})
     lessons = relationship("Lesson", back_populates="course", cascade="all, delete-orphan")
     reviews = relationship("Review", backref="course")
-    user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
-    user = relationship("User", secondary="enrollments", back_populates="courses")  # noqa
+    # user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
+    users = relationship("User", secondary="enrollments", back_populates="courses")  # noqa
 
     def __init__(self, *args, **kwargs):
         """initializes Course"""

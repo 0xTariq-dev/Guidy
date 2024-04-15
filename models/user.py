@@ -17,17 +17,17 @@ enrollments = Table('enrollments', Base.metadata,
 class User(BaseModel, Base, UserMixin):
     """User class to interact with the API."""
     __tablename__ = 'users'
-    email = Column(String(128), nullable=False)
-    username = Column(String(128), nullable=False)
-    password = Column(String(128), nullable=False)
-    first_name = Column(String(128), nullable=False)
-    last_name = Column(String(128), nullable=False)
+    email = Column(String(128), nullable=False, unique=True)
+    username = Column(String(20), nullable=False, unique=True)
+    _password = Column('password', String(128), nullable=False)
+    first_name = Column(String(60), nullable=False)
+    last_name = Column(String(60), nullable=False)
     active = Column(Boolean, default=True)
     authenticated = Column(Boolean, default=False)
     review = relationship("Review", backref="user")
     courses = relationship("Course",
                            secondary="enrollments",
-                           back_populates="user")
+                           back_populates="users")
 
     def __init__(self, *args, **kwargs):
         """User class constructor"""
@@ -41,11 +41,12 @@ class User(BaseModel, Base, UserMixin):
     @password.setter
     def password(self, value):
         """Password setter method."""
-        self._password = bcrypt.hashpw(value.encode(), bcrypt.gensalt())
+        value = value.encode() if isinstance(value, str) else value
+        self._password = bcrypt.hashpw(value, bcrypt.gensalt())
 
-    def is_valid_password(self, password):
+    def check_password(self, password):
         """Password validation method."""
-        return bcrypt.checkpw(password.encode(), self.password.encode())
+        return bcrypt.checkpw(password.encode(), self._password.encode())
 
     @property
     def is_authenticated(self):

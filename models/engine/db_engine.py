@@ -5,7 +5,9 @@ Contains the class DBStorage
 
 import models
 import sqlalchemy
+import sqlalchemy.exc
 from os import getenv
+from dotenv import load_dotenv
 from models.base_model import BaseModel, Base
 from models.user import User
 from models.course import Course
@@ -23,6 +25,8 @@ classes = {"User": User,
            "Review": Review
            }
 
+load_dotenv()
+
 
 class DBStorage:
     """interacts with the MySQL database"""
@@ -38,20 +42,28 @@ class DBStorage:
     def __init__(self):
         """Instantiate a DBStorage object"""
         MYSQL_USER = getenv('DBUSER')
-        MYSQL_PWD = getenv('PWD')
+        MYSQL_PWD = getenv('DBPWD')
         MYSQL_HOST = getenv('HOST')
         MYSQL_DB = getenv('DB')
         ENV = getenv('ENV')
 
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(MYSQL_USER,
-                                             MYSQL_PWD,
-                                             MYSQL_HOST,
-                                             MYSQL_DB),
-                                      pool_pre_ping=True)
+        try:
+            self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+                                        format(MYSQL_USER,
+                                                MYSQL_PWD,
+                                                MYSQL_HOST,
+                                                MYSQL_DB),
+                                        pool_pre_ping=True)
+        except sqlalchemy.exc.SQLAlchemyError and sqlalchemy.exc.OperationalError as e:
+            print(f"Error creating engine: {e}")
 
         if ENV == "test":
             Base.metadata.drop_all(self.__engine)
+
+    @property
+    def session(self):
+        """returns the session attribute"""
+        return self.__session
 
     def all(self, cls=None):
         """query on the current database session"""
@@ -118,24 +130,23 @@ class DBStorage:
     def count(self, cls=None):
         """count the number of objects in storage"""
         all_cls = classes.keys()
-        st = models.storage
-        count = len(st.all(cls)) if cls else sum(
-            [len(st.all(cl)) for cl in all_cls]
+        count = self.__session.query(cls).count() if cls else sum(
+            self.__session.query(cl).count() for cl in all_cls
             )
         return count
 
     def __delete_user(self, user):
         """delete user and associated objects"""
-        courses = self.__session.query(Course).filter(Course.user_id == user.id).all()
-        for course in courses:
-            lessons = self.__session.query(Lesson).filter(Lesson.course_id == course.id).all()
-            for lesson in lessons:
-                resources = self.__session.query(Resource).filter(Resource.lesson_id == lesson.id).all()
-                [self.__session.delete(resource) for resource in resources]
-                self.__session.delete(lesson)
-            reviews = self.__session.query(Review).filter(Review.course_id == course.id).all()
-            [self.__session.delete(review) for review in reviews]
-            self.__session.delete(course)
+        # courses = self.__session.query(Course).filter(Course.user_id == user.id).all()
+        # for course in courses:
+        #     lessons = self.__session.query(Lesson).filter(Lesson.course_id == course.id).all()
+        #     for lesson in lessons:
+        #         resources = self.__session.query(Resource).filter(Resource.lesson_id == lesson.id).all()
+        #         [self.__session.delete(resource) for resource in resources]
+        #         self.__session.delete(lesson)
+        #     reviews = self.__session.query(Review).filter(Review.course_id == course.id).all()
+        #     [self.__session.delete(review) for review in reviews]
+        #     self.__session.delete(course)
         self.__session.flush()
         self.__session.delete(user)
         self.save()
@@ -160,3 +171,7 @@ class DBStorage:
         self.__session.delete(lesson)
         self.__session.flush()
         self.save()
+
+    def rollback(self):
+        """rollback a transaction"""
+        self.__session.rollback()

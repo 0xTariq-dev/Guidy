@@ -60,8 +60,8 @@ class BaseModel(Base):
         d = dict(self.__dict__).copy()
         if "_sa_instance_state" in d:
             del d["_sa_instance_state"]
-        if "password" in d:
-            del d["password"]
+        if "_password" in d:
+            del d["_password"]
         if "created_at" in d:
             d["created_at"] = d["created_at"].strftime(time)
         if "updated_at" in d:
