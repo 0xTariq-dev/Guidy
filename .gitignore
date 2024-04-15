@@ -10,3 +10,4 @@ test.html
 .venv
 models/AI/DeepSeek-VL-7B
 models/AI/transformers-test.py
+flask_session/
