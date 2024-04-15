@@ -40,7 +40,7 @@
                 <a class="navbar-brand my-1 px-3" href="#">
                     <img class="object-fit-scale" height="50" src="../static/images/logo.png" alt="Guidy" />
                 </a>
-                <a class="btn btn-primary" href="login.html">Login</a>
+                <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Login</a>
                 <div class="dropdown m-3 bd-mode-toggle">
                     <button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme"
                         type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
@@ -183,7 +183,7 @@
                 </div>
             </div>
             <hr>
-            <h3 class="mt-4 pt-5">Ready to get started? <a href="signup.html">Sign up</a> now!</h3>
+            <h3 class="mt-4 pt-5">Ready to get started? <a href="{{ url_for('auth.signup') }}">Sign up</a> now!</h3>
         </section>
         <!-- Footer-->
         <footer class="footer">
