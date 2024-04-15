@@ -28,7 +28,7 @@ class GuidyAdmin(cmd.Cmd):
 
     dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
 
-    types = {'rating': int, 'length': int}
+    types = {'rating': int, 'length': int, 'rating': int}
 
     def cmdloop(self, intro=None):
         while True:
@@ -44,6 +44,11 @@ class GuidyAdmin(cmd.Cmd):
         if not sys.__stdin__.isatty():
             print('GuidyAdmin> ', end='')
 
+    def precmd(self, line):
+        storage.reload()
+        super().precmd(line)
+        return line
+
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
         self.preloop()
@@ -55,22 +60,16 @@ class GuidyAdmin(cmd.Cmd):
         for arg in ObjD:
             if '=' not in arg:
                 continue
-            matches = re.match(r'([^=]*)=(.*)', arg)
+            matches = re.match(r'(\w+)=(.*)', arg)
             if matches:
-                print(matches.groups())
+                # print(matches.groups())
                 k, v = matches.groups()
-                if v[0] == v[-1] == '"':
+                if k in self.types:
+                    v = self.types[k](v)
+                else:
                     v = v.replace('_', ' ')
-            else:
-                k, v = arg.split('=', 1)
-                try:
-                    v = int(v)
-                except ValueError:
-                    try:
-                        v = float(v)
-                    except ValueError:
-                        continue
-            ArgDict[k] = str(v)
+                ArgDict[k] = v
+            print(f'{k}: {v}')
         return ArgDict
 
     def do_create(self, arg):
@@ -174,13 +173,25 @@ class GuidyAdmin(cmd.Cmd):
         [usage]: update <Object Type> <Instance ID> <Key> <Value>
         """
         ObjD = shlex.split(arg)
-        Type, ID = ObjD[0], ObjD[1]
-        Key, Value = ObjD[2], ObjD[3]
-        Ints = ["rating", "length"]
 
         if len(ObjD) == 0:
             print("** Object Type Missing **")
             return
+
+        if len(ObjD) < 3:
+            print("** Provide Attribute Name**")
+            print(f"{self.do_update.__doc__}")
+            return
+
+        if len(ObjD) < 4:
+            print("** Provide Attribute Value **")
+            print(f"{self.do_update.__doc__}")
+            return
+
+
+        Type, ID = ObjD[0], ObjD[1]
+        Key, Value = ObjD[2], ObjD[3] if len(ObjD) > 3 else ""
+        Ints = ["rating", "length"]
 
         if Type not in self.classes:
             print(f"** Unidentified Type {Type} **")
@@ -195,14 +206,6 @@ class GuidyAdmin(cmd.Cmd):
             print("** NO Object Found **")
             return
 
-        if len(ObjD) < 3:
-            print("** Provide Attribute Name **")
-            return
-
-        if len(ObjD) < 4:
-            print("** Provide Attribute Vlaue **")
-            return
-
         if Key in Ints:
             try:
                 Value = int(Value)
@@ -212,8 +215,18 @@ class GuidyAdmin(cmd.Cmd):
         setattr(storage.all()[Obj], Key, Value)
         storage.all()[Obj].save()
 
+    def do_enroll(self, line):
+        """Enroll a user in a course"""
+        user_id, course_id = shlex.split(line)
+        user = storage.get(User, user_id)
+        course = storage.get(Course, course_id)
+        print(f'Enrolling {user.username} in {course.title}')
+        user.courses.append(course)
+        storage.save()
+
     def do_EOF(self, arg):
         """Exits console"""
+        print("\nQuitting...")
         return True
 
     def emptyline(self):
@@ -222,6 +235,7 @@ class GuidyAdmin(cmd.Cmd):
 
     def do_quit(self, arg):
         """Quit command to exit the program"""
+        print("Quitting...")
         return True
 
 
