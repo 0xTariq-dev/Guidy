@@ -11,3 +11,4 @@ test.html
 models/AI/DeepSeek-VL-7B
 models/AI/transformers-test.py
 flask_session/
+playground.py

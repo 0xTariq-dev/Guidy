@@ -18,7 +18,7 @@ session = db.session
 class LoginForm(FlaskForm):
     username = StringField(id='username', name='username or email',
                            validators=[InputRequired()],
-                           render_kw={'placeholder': 'Username or Email'}
+                           render_kw={'placeholder': 'example@gmail.com'}
                            )
     password = PasswordField(id='password', name='password',
                              validators=[InputRequired()],

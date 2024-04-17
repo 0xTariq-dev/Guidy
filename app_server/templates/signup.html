@@ -9,7 +9,6 @@
 	<title>Guidy</title>
 	<link rel="shortcut icon" href="../static/images/icon.png?{{ cache_id }}" />
 	<link href="../static/styles/main-min.css?{{ cache_id }}" rel="stylesheet">
-	<link href="../static/node_modules/bootstrap-icons/font/bootstrap-icons.min.css?{{ cache_id }}" rel="stylesheet" />
 	<link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css?{{ cache_id }}' rel='stylesheet'>
 	<script src="../static/node_modules/bootstrap/js/color-modes.js?{{ cache_id }}"></script>
 </head>
@@ -33,24 +32,15 @@
 	</svg>
 
 	<header class="navbar sticky-top bg-body-tertiary p-0 shadow flix-row">
-		<button class="nav-link px-3 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
-			aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
-			<i class="bi bi-list-columns h4 text-primary"></i>
-		</button>
 
-		<a class="navbar-brand my-1 px-3" href="#">
+		<a class="navbar-brand my-1 px-3" href="{{ url_for('views.index') }}">
 			<img class="object-fit-scale" height="50" src="../static/images/logo.png?{{ cache_id }}" alt="Guidy" />
 		</a>
 
-		<!-- <a href="#account" class="mx-2">
-			<button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#account-collapse">
-				<i class="bi bi-person-circle h1 text-primary"></i>
-			</button>
-		</a> -->
 		<!-- theme change element -->
 		<div class="dropdown m-3 bd-mode-toggle">
-			<button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme"
-				type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+			<button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button"
+				aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
 				<svg class="bi my-1 theme-icon-active" width="1em" height="1em">
 					<use href="#circle-half"></use>
 				</svg>
@@ -60,8 +50,8 @@
 			<!-- theme list -->
 			<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
 				<li>
-					<button type="button" class="dropdown-item d-flex align-items-center"
-						data-bs-theme-value="light" aria-pressed="false">
+					<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"
+						aria-pressed="false">
 						<svg class="bi me-2 opacity-50" width="1em" height="1em">
 							<use href="#sun-fill"></use>
 						</svg>
@@ -94,8 +84,8 @@
 	</header>
 
 	<div class="container d-flex justify-content-center align-items-center vh-100">
-    	<div class="card" style="width: 28rem;">
-        	<div class="card-body">
+		<div class="card" style="width: 28rem;">
+			<div class="card-body">
 				<form method="POST">
 					{{ form.csrf_token }}
 					{{ form.hidden_tag() }}
@@ -103,9 +93,9 @@
 						{{ form.username.label }}
 						{{ form.username(class_="form-control", aria_describedby="user") }}
 						{% if form.username.errors %}
-							{% for err in form.username.errors %}
-								<div class="alert alert-danger">{{ err }}</div>
-							{% endfor %}
+						{% for err in form.username.errors %}
+						<div class="alert alert-danger">{{ err }}</div>
+						{% endfor %}
 						{% endif %}
 					</div>
 					<div class="mb-3 form-group">
@@ -131,7 +121,8 @@
 						{% for error in form.email.errors %}
 						<div class="alert alert-danger">{{ error }}</div>
 						{% endfor %}
-					</div>					<div class="mb-3 form-group">
+					</div>
+					<div class="mb-3 form-group">
 						{{ form.password.label }}
 						{{ form.password(class="form-control") }}
 						{% for error in form.password.errors %}
@@ -149,31 +140,43 @@
 				</form>
 				<a href="{{ url_for('auth.login') }}" class="btn btn-link mt-3 mb-4">Already have an account, Login.</a>
 			</div>
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
+	</div>
 	</div>
 	<!-- Footer-->
-	<footer class="footer mb-3 mt-3">
+	<footer class="m-3">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+				<div class="text-center">
 					<ul class="list-inline mb-2">
-						<li class="list-inline-item"><a href="about.html">About</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.about') }}">About</a></li>
 						<li class="list-inline-item">⋅</li>
 						<li class="list-inline-item"><a href="#!">Contact</a></li>
 						<li class="list-inline-item">⋅</li>
-						<li class="list-inline-item"><a href="terms_of_use.html">Terms of Use</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.terms') }}">Terms of Use</a></li>
 						<li class="list-inline-item">⋅</li>
-						<li class="list-inline-item"><a href="privacy_policy.html">Privacy Policy</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.privacy') }}">Privacy Policy</a></li>
 					</ul>
 					<p class="text-muted small mb-4 mb-lg-0">&copy; Guidy 2024. All Rights Reserved.</p>
 				</div>
+				<!-- <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-facebook fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-twitter fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!"><i class="bi-instagram fs-3"></i></a>
+                            </li>
+                        </ul>
+                    </div> -->
 			</div>
 		</div>
 	</footer>
 	<script src="../static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="../static/js/chatBox.js"></script>
 </body>
 
 </html>

@@ -33,19 +33,15 @@
 	</svg>
 
 	<header class="navbar sticky-top bg-body-tertiary p-0 shadow flix-row">
-		<button class="nav-link px-3 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar"
-			aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
-			<i class="bi bi-list-columns h4 text-primary"></i>
-		</button>
 
-		<a class="navbar-brand my-1 px-3" href="#">
+		<a class="navbar-brand my-1 px-3" href="{{ url_for('views.index') }}">
 			<img class="object-fit-scale" height="50" src="../static/images/logo.png?{{ cache_id }}" alt="Guidy" />
 		</a>
 
 		<!-- theme change element -->
 		<div class="dropdown m-3 bd-mode-toggle">
-			<button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme"
-				type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+			<button class="btn btn-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button"
+				aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
 				<svg class="bi my-1 theme-icon-active" width="1em" height="1em">
 					<use href="#circle-half"></use>
 				</svg>
@@ -55,8 +51,8 @@
 			<!-- theme list -->
 			<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
 				<li>
-					<button type="button" class="dropdown-item d-flex align-items-center"
-						data-bs-theme-value="light" aria-pressed="false">
+					<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light"
+						aria-pressed="false">
 						<svg class="bi me-2 opacity-50" width="1em" height="1em">
 							<use href="#sun-fill"></use>
 						</svg>
@@ -87,18 +83,19 @@
 			</ul>
 		</div>
 	</header>
+
 	<div class="container d-flex justify-content-center align-items-center vh-100">
-    	<div class="card" style="width: 28rem;">
-        	<div class="card-body">
+		<div class="card" style="width: 28rem;">
+			<div class="card-body">
 				{% with messages = get_flashed_messages() %}
-					{% if messages %}
-				  		<ul class=flashes>
-				 		<!-- {% for message in messages %} -->
-							<li>{{ messages[-1] }}</li>
-				  		<!-- {% endfor %} -->
-				  		</ul>
-					{% endif %}
-			  	{% endwith %}
+				{% if messages %}
+				<ul class=flashes>
+					<!-- {% for message in messages %} -->
+					<li>{{ messages[-1] }}</li>
+					<!-- {% endfor %} -->
+				</ul>
+				{% endif %}
+				{% endwith %}
 				<form method="POST">
 					{{ form.hidden_tag() }}
 					<div class="mb-3 form-group">
@@ -116,43 +113,44 @@
 					</div>
 					<button type="submit" class="btn btn-primary">Log in</button>
 				</form>
-        	</div>
-			<a href="{{ url_for('auth.signup') }}" class="btn btn-link mt-3 mb-4">Don't have an account? Sign up instead.</a>
+			</div>
+			<a href="{{ url_for('auth.signup') }}" class="btn btn-link mt-3 mb-4">Don't have an account? Sign up
+				instead.</a>
 		</div>
 	</div>
 	<!-- Footer-->
-	<footer class="footer mb-3 mt-3">
+	<footer class="m-3">
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+				<div class="text-center">
 					<ul class="list-inline mb-2">
-						<li class="list-inline-item"><a href="about.html">About</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.about') }}">About</a></li>
 						<li class="list-inline-item">⋅</li>
 						<li class="list-inline-item"><a href="#!">Contact</a></li>
 						<li class="list-inline-item">⋅</li>
-						<li class="list-inline-item"><a href="terms_of_use.html">Terms of Use</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.terms') }}">Terms of Use</a></li>
 						<li class="list-inline-item">⋅</li>
-						<li class="list-inline-item"><a href="privacy_policy.html">Privacy Policy</a></li>
+						<li class="list-inline-item"><a href="{{ url_for('views.privacy') }}">Privacy Policy</a></li>
 					</ul>
 					<p class="text-muted small mb-4 mb-lg-0">&copy; Guidy 2024. All Rights Reserved.</p>
 				</div>
-				<!-- <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
-					<ul class="list-inline mb-0">
-						<li class="list-inline-item me-4">
-							<a href="#!"><i class="bi-facebook fs-3"></i></a>
-						</li>
-						<li class="list-inline-item me-4">
-							<a href="#!"><i class="bi-twitter fs-3"></i></a>
-						</li>
-						<li class="list-inline-item">
-							<a href="#!"><i class="bi-instagram fs-3"></i></a>
-						</li>
-					</ul>
-				</div> -->
+				<!-- <div class="text-center text-lg-end my-auto">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-facebook fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-twitter fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!"><i class="bi-instagram fs-3"></i></a>
+                            </li>
+                        </ul>
+                    </div> -->
 			</div>
 		</div>
 	</footer>
 	<script src="../static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="../static/js/chatBox.js"></script>
 </body>
+
 </html>
