@@ -2,6 +2,7 @@
 """ Guidy Blueprint """
 
 from flask import *
+from datetime import datetime
 from uuid import uuid4
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from app_server.blueprints.forms import *
@@ -92,7 +93,7 @@ def account():
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.email = form.email.data
-        session.add(user)
+        db.new(user)
         db.save()
         flash(f'User {user.username} updated successfully!')
         return render_template('account.html', user=user, form=form)
@@ -110,9 +111,9 @@ def account():
 def dashboard():
     """ dashboard page route handler"""
     user = current_user
-    print(user)
-    print(user.courses)
-    return render_template('dashboard.html', user=user, courses=user.courses)
+    date = datetime.now()
+    courses = user.courses
+    return render_template('dashboard.html', user=user, courses=courses, date=date)
 
 @auth.route('/courses/<coursename>/<course_id>', methods=['GET'])
 @login_required
@@ -131,6 +132,7 @@ def new_course():
     """ Course page route handler"""
     form = CourseForm()
     user = current_user
+    username = user.username
 
     if request.method == 'POST':
         subject = form.title.data
@@ -150,6 +152,7 @@ def new_course():
         db.session.add(generated_course)
         user.courses.append(generated_course)
         db.save()
-        # return redirect(url_for('auth.course', username=username,
-        #                         coursename=generated_course.name))
+        return redirect(url_for('auth.course', username=username,
+                                coursename=generated_course.title,
+                                course_id=generated_course.id))
     return render_template('new_course.html', form=form)
