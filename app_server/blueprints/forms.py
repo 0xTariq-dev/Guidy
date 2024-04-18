@@ -9,6 +9,7 @@ from models.user import User
 # from models.resource import Resource
 # from models.review import Review
 # from flask import flash
+from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, ValidationError, SelectField
 from wtforms.validators import InputRequired, Length, Email, EqualTo
@@ -109,45 +110,45 @@ class ProfileForm(FlaskForm):
     """Profile Form"""
     first_name = StringField(id='first name', name='First name',
                              validators=[InputRequired(),
-                                         Length(min=2, max=60)],
-                             render_kw={'placeholder': 'First Name'}
+                                         Length(min=2, max=60)]
                             )
     last_name = StringField(id='last name', name='Last name',
                             validators=[InputRequired(),
-                                        Length(min=2, max=60)],
-                            render_kw={'placeholder': 'Last Name'}
+                                        Length(min=2, max=60)]
                             )
     email = StringField(id='email', name='Email',
                         validators=[InputRequired(), Email(),
-                                    Length(min=6, max=60)],
-                        render_kw={'placeholder': 'Email'}
+                                    Length(min=6, max=60)]
                         )
-    submit = SubmitField('Update')
+
+    submit = SubmitField('Save')
 
     def validate_username(self, username):
         username_regex = r'^[a-zA-Z0-9_.-]+$'
-        
+        user = session.query(User).filter_by(username=username.data).first()
+        username = username.data
+
+        if user:
+            raise ValidationError('Username already exists, please choose another one.')
+
         if re.match(username_regex, username):
-            return 'username'
+            return True
         else:
-            return None
+            raise ValidationError('Username must contain only alphanumeric characters, dots, underscores, and hyphens.')
 
     def validate_email(self, email):
         email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        user = session.query(User).filter_by(email=email.data).first()
+        email = email.data
         
+        if user:
+            raise ValidationError('Email already registered, Login instead.')
         if re.match(email_regex, email):
-            return 'email'
+            return True
         else:
-            return None
+            raise ValidationError('Invalid email address.')
 
-    def validate_password(self, field):
-        password = field.data
-        password_regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$'
-        
-        if re.match(password_regex, password):
-            return 'password'
-        else:
-            return None
+
 
 class CourseForm(FlaskForm):
     title = StringField(id='title', name='Title',
@@ -169,10 +170,11 @@ class CourseForm(FlaskForm):
                          validators=[InputRequired()],
                          render_kw={'placeholder': 'Length'}
                          )
-    level = StringField(id='level', name='Level',
+    level = SelectField(id='level', name='Level',
                         validators=[InputRequired(),
                                     Length(min=4, max=60)],
-                        render_kw={'placeholder': 'Level'}
+                        render_kw={'placeholder': 'Level'},
+                        choices=[('beginner', 'beginner'), ('intermediate', 'intermediate'),('Advanced', 'Advanced')]
                         )
     resource_type = SelectField(id='resource_type', name='Resource Type',
                                 validators=[InputRequired(),

@@ -23,9 +23,9 @@ def login():
     """ Landing page route handler"""
     form = LoginForm()
     if current_user.is_authenticated:
-        flash('You are already logged in!')
         # get_flashed_messages()
-        # return redirect(url_for('auth.profile', userid=current_user.id))
+        return redirect(url_for('auth.dashboard'))
+        
 
     if request.method == 'POST' and form.validate_on_submit():
         identity = form.username.data
@@ -41,8 +41,7 @@ def login():
             user.authenticated = True
             db.session.add(user)
             db.save()
-            return "Logged in successfully!"
-            # return redirect(url_for('profile', username=user.username))
+            return redirect(url_for('auth.dashboard'))
         else:
             flash(f'{field}: {error}' for field, error in form.errors.items())
 
@@ -83,56 +82,74 @@ def logout():
     logout_user()
     return redirect(url_for('auth.login'))
 
-@auth.route('/profile/<username>', methods=['GET'])
+@auth.route('/account', methods=['GET', 'POST'])
 @login_required
-def profile():
-    """ Profile page route handler"""
-    user = current_user()
-    username = user.username
-    return render_template('dashboard.html', user=user,
-                           courses=user.courses)
-
-@auth.route('/profile/<username>/update', methods=['GET', 'POST'])
-@login_required
-def update(username):
+def account():
     """ Profile page route handler"""
     form = ProfileForm()
-    user = current_user()
-    username = user.username
-    courses = user.courses
-    return render_template('profile.html', user=user, courses=courses, form=form)
+    user = current_user
+    if request.method == 'POST':
+        user.first_name = form.first_name.data
+        user.last_name = form.last_name.data
+        user.email = form.email.data
+        session.add(user)
+        db.save()
+        flash(f'User {user.username} updated successfully!')
+        return render_template('account.html', user=user, form=form)
+    else:
+        for field, error in form.errors.items():
+            for err in error:
+                flash(f'{field}: {err}')
 
-@auth.route('/<username>/<coursename>', methods=['GET'])
+    return render_template('account.html', user=user, form=form)
+
+
+
+@auth.route('/dashboard', methods=['GET'])
 @login_required
-def course(username, course):
+def dashboard():
+    """ dashboard page route handler"""
+    user = current_user
+    print(user)
+    print(user.courses)
+    return render_template('dashboard.html', user=user, courses=user.courses)
+
+@auth.route('/courses/<coursename>/<course_id>', methods=['GET'])
+@login_required
+def course(coursename, course_id):
     """ Course page route handler"""
-    user = current_user()
-    course = db.session.query(Course).filter_by(name=course).first()
-    return render_template('course.html', user=user, course=course)
+    user = current_user
+    courses = [course for course in user.courses if course.id == course_id]
+    course = courses[0]
+    lessons = course.lessons_titles.replace("'", "\"")
+    lessons = json.loads(lessons)
+    return render_template('courses.html', course=course, lessons=lessons)
 
-@auth.route('/<username>/create', methods=['GET', 'POST'])
+@auth.route('/new_course', methods=['GET', 'POST'])
 @login_required
-def create(username):
+def new_course():
     """ Course page route handler"""
     form = CourseForm()
-    user = current_user()
-    if form.validate_on_submit() and request.method == 'POST':
-        subject = form.subject.data
+    user = current_user
+
+    if request.method == 'POST':
+        subject = form.title.data
         categorey = form.category.data
         resource_type = form.resource_type.data
-        level = form.course_level.data
-        number_of_lessons = form.number_of_lessons.data
+        level = form.level.data
+        number_of_lessons = form.length.data
+        print("Hello from new course")
         course = Guidy.CreateCourse(subject, level, number_of_lessons)
-        generated_course = Course(name=course['title'],
+        generated_course = Course(title=course['title'],
                                   category=course['category'],
                                   description=course['description'],
                                   level=course['level'],
-                                  number_of_lessons=course['length'],
+                                  length=course['length'],
                                   resource_type=resource_type,
-                                  lessons_titles=course['lessons_titles'])
+                                  lessons_titles=course['lessons'])
         db.session.add(generated_course)
         user.courses.append(generated_course)
         db.save()
-        return redirect(url_for('auth.course', username=username,
-                                coursename=generated_course.name))
-    return render_template('create.html', form=form)
+        # return redirect(url_for('auth.course', username=username,
+        #                         coursename=generated_course.name))
+    return render_template('new_course.html', form=form)
