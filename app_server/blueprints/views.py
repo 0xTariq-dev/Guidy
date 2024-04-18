@@ -29,3 +29,8 @@ def terms():
 def privacy():
     """ Privacy page route handler"""
     return render_template('privacy.html')
+
+@views.route('/chat')
+def chat():
+    """ chat page route handler"""
+    return render_template('chat.html')
