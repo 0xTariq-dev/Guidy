@@ -11,6 +11,7 @@
 	<link href="../../static/styles/main-min.css" rel="stylesheet">
 	<link href="../../static/node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
 	<script src="../../static/node_modules/bootstrap/js/color-modes.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 
 <body>
@@ -185,8 +186,8 @@
 					<!--  for lesson in lessons-list  -->
 					{% for lesson_num, lesson_title in lessons.items() %}
 					<li class="nav-item" role="presentation">
-						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#{{ lesson_num }}" type="button"
-							role="tab" aria-selected="false">
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab{{ lesson_num }}"
+							type="button" role="tab" aria-selected="false">
 							{{ lesson_title }}
 						</button>
 					</li>
@@ -214,16 +215,16 @@
 					<p>
 						{{ course.level }}
 					</p>
-					<p class="h5">Resource type:</p>
+					<p class="h5">resource_type:</p>
 					<p>
 						{{ course.resource_type }}
 					</p>
 				</div>
 			</div>
 			{% for lesson_num, lesson_title in lessons.items() %}
-			<div class="tab-pane fade ms-4" id="{{ lesson_num }}" role="tabpanel">
+			<div class="tab-pane fade ms-4" id="tab{{ lesson_num }}" role="tabpanel">
 				<h1 class="h1 m-3">{{ lesson_title }}</h1>
-				<div class="ms-3">
+				<div class="tab-content ms-3" id="{{ lesson_num }}">
 					<p class="card-text placeholder-glow m-4">
 						<span class="placeholder col-7"></span>
 						<span class="placeholder col-4"></span>
@@ -276,7 +277,10 @@
 			</div>
 		</div>
 	</footer>
-
+	<script>
+		var courseID = "{{ course.id }}"
+	</script>
+	<script src="../../static/js/lessons.js"></script>
 	<script src="../../static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

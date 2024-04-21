@@ -4,10 +4,12 @@
 from flask import *
 from datetime import datetime
 from uuid import uuid4
+import re
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from app_server.blueprints.forms import *
 from models import storage as db
 from models.course import Course
+from models.lesson import Lesson
 from models.AI.AI_service import Guidy
 
 auth = Blueprint('auth', __name__)
@@ -156,3 +158,27 @@ def new_course():
                                 coursename=generated_course.title,
                                 course_id=generated_course.id))
     return render_template('new_course.html', form=form)
+
+@auth.route('/course/<course_id>/lesson/<lesson_num_str>', methods=['GET'])
+# @login_required
+def lesson(course_id, lesson_num_str):
+    """ Course page route handler"""
+    course = db.session.query(Course).filter_by(id = course_id).first()
+    lesson_num = int(re.search(r'\d+', lesson_num_str).group())
+    for lesson in course.lessons:
+        if lesson.index == lesson_num:
+            return lesson.description
+
+    lessons = course.lessons_titles.replace("'", "\"")
+    lessons_titles = json.loads(lessons)
+    lesson_title = lessons_titles[lesson_num_str]
+    lesson = Guidy.ExplainLesson(CourseSubject=course.title,
+                                LessonTitle=lesson_title,
+                                ResourcesType=course.resource_type)
+    new_lesson = Lesson(index=lesson_num, title=lesson_title,
+                        description=lesson['description'],
+                        course_id=course_id)
+    db.session.add(new_lesson)
+    course.lessons.append(new_lesson)
+    db.save()
+    return lesson['description']
