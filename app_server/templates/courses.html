@@ -186,7 +186,7 @@
 					<!--  for lesson in lessons-list  -->
 					{% for lesson_num, lesson_title in lessons.items() %}
 					<li class="nav-item" role="presentation">
-						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab{{ lesson_num }}"
+						<button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab{{ lesson_num[-1] }}"
 							type="button" role="tab" aria-selected="false">
 							{{ lesson_title }}
 						</button>
@@ -222,7 +222,7 @@
 				</div>
 			</div>
 			{% for lesson_num, lesson_title in lessons.items() %}
-			<div class="tab-pane fade ms-4" id="tab{{ lesson_num }}" role="tabpanel">
+			<div class="tab-pane fade ms-4" id="tab{{ lesson_num[-1] }}" role="tabpanel">
 				<h1 class="h1 m-3">{{ lesson_title }}</h1>
 				<div class="tab-content ms-3" id="{{ lesson_num }}">
 					<p class="card-text placeholder-glow m-4">
